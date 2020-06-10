@@ -4,7 +4,8 @@ set env(TERM) "xterm"
 set ConfigFile {opentest.txt}
 set Username ""
 set Password ""
-set Path "/home/eclipseftp/ftp-in/"
+set GlobalPathin "/home/eclipseftp/ftp-in/"
+set GlobalPathout "/home/eclipseftp/ftp-out"
 set ConfigPath "/home/eclipseftp/scripts/config/"
 set ProcessedPath "/home/eclipseftp/processed/"
 
@@ -152,7 +153,7 @@ proc ProcessCustomer {path configpath} {
 }
 
 # Main output
-puts [ProcessCustomer $Path $ConfigPath]
+puts [ProcessCustomer $GlobalPathin $ConfigPath]
 
 # expect -timeout -1 eof
 
