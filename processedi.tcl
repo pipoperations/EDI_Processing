@@ -35,7 +35,6 @@ proc ListFiles {filepath} {
 
 # Proceedure to parse customer data files into a key value list
 
-
 proc getCustomerData {filename} {
     set openFile [open $filename r]
     set data [read -nonewline $openFile]
@@ -60,6 +59,7 @@ proc CustomerList {filelist} {
 }
 
 # Parses data files and extracts the customer ID an matches with a connection string
+
 proc ParseFile {filename ConfigPath} {
     # search file for unique key
     set dataFile [open $filename r]
@@ -153,6 +153,7 @@ proc ProcessCustomer {path configpath} {
 }
 
 # Main output
+
 puts [ProcessCustomer $GlobalPathin $ConfigPath]
 
 # expect -timeout -1 eof
