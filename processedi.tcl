@@ -1,5 +1,6 @@
 #!/usr/bin/expect
-
+######################################################################
+##
 ## NAME
 ##  processedi.tcl
 ##
@@ -7,22 +8,25 @@
 ##  Brian P. Wood
 ##
 ## TODO
-## --Implement SMB for CommerciaHub
+##  Implement SMB for CommerciaHub
 ## 
 ## HISTORY
 ##  V0.01 05.30.2020 - Initial script for United Rentals
 ##
-## This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
-## Customer files should be in this format
-## CustomerName     ABC Corp
-## CustomerNumber   1234
-## Protocol         sftp
-## Host       10.10.10.10
-## Username         Brianisawesome
-## Password         W3lc0m3!
-## PushDirectory    ftp-in
-## PullDirectory    ftp-out
+## NOTES
+##  This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
+##  Customer files should be in this format
+##  CustomerName     ABC Corp
+##  CustomerNumber   1234
+##  Protocol         sftp
+##  Host       10.10.10.10
+##  Username         Brianisawesome
+##  Password         W3lc0m3!
+##  PushDirectory    ftp-in
+##  PullDirectory    ftp-out
 ##  Use tabs between keys and values
+##
+#######################################################################
 
 #======================================================================
 # Global Variables
@@ -136,23 +140,24 @@ proc SendFile {file connectionstring} {
             puts "$username $password $ipAddress"
             spawn sftp "$username@$ipAddress"
             expect {
-                "assword" {
+                "assword:" {
                     send "$password\r"
                 }
                 "yes/no" {
                     send "yes\r"
                 }
                 "Permission"{
-                    return -code ok
+                    return 0
                 }
             }
             expect "> " {send "cd $pushDirectory\r"}
             expect "> " { send "put $file\r" }
             expect "> " { send "quit" }
+            return 0
         }
         smb {
             puts "$connectionstring"
-            return -code ok
+            return 0
         }
         default {
             puts "Invalid protocol"
@@ -215,13 +220,12 @@ proc ProcessCustomer {path configpath} {
     foreach file $dataFileList {
         set hasCustomer [ParseFile $file $configpath]
         if { $hasCustomer > 0 } {
-            puts [SendFile $file $hasCustomer]
-##          if {[SendFile $file $hasCustomer] == 0} {
-##
-##                ## SendFile should return 0 if it is successful 
-##                
-##                MoveFile $file
-##           }
+            set success [SendFile $file $hasCustomer]
+            puts "Result code $success"
+            if {$success == 0} {
+                # SendFile should return 0 if it is successful 
+                MoveFile $file
+            }
         } else {
             puts "$file Doesn't have a customer $hasCustomer"
         }
