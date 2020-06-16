@@ -83,11 +83,8 @@ proc CustomerList {filelist} {
 }
 
 # Parses data files and extracts the customer ID an matches with a connection string
-<<<<<<< HEAD
 #-------------------------------------------------------------------------
 
-=======
->>>>>>> 27189e11061deec36d0570f602a0b457e9b93ddd
 proc ParseFile {filename ConfigPath} {
     # search file for unique key
     set dataFile [open $filename r]
@@ -232,16 +229,12 @@ proc ProcessCustomer {path configpath} {
     return 0
 }
 
-<<<<<<< HEAD
 #==========================================================================
 # Main
 #==========================================================================
 
 puts "The time is: [clock format $systemTime -format %H:%M:%S]"
 puts "The date is: [clock format $systemTime -format %D]"
-=======
-# Main output
->>>>>>> 27189e11061deec36d0570f602a0b457e9b93ddd
 puts [ProcessCustomer $GlobalPathin $ConfigPath]
 # expect -timeout -1 eof
 exit 0
