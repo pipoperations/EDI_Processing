@@ -1,8 +1,0 @@
-CustomerName	"CommerceHub Test"
-CustomerNumber	5082531642CHT
-Protocol	sftp
-Host	protectind.sftp-test.commercehub.com
-Username	protectind
-Password	L3ft.Cake1Program#
-PushDirectory	/
-PullDirectory	/

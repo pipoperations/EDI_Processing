@@ -1,9 +1,0 @@
-CustomerName	"United Rentals"
-CustomerNumber	956318222
-Protocol	sftp
-Host	ftp.sn-prod2.cognizant.com
-Username	Prprod
-Password	Pro@123p
-PushDirectory   INBOUND
-PullDirectory
-
