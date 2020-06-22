@@ -56,7 +56,7 @@ proc ListFiles {filepath} {
     return $filelist
 }
 
-# Proceedure to parse customer data files into a key value list
+# Proceedure to parse customer data files into a key value list.
 #--------------------------------------------------------------------
 
 
@@ -86,7 +86,7 @@ proc CustomerList {filelist} {
     return $Customer
 }
 
-# Parses data files and extracts the customer ID an matches with a connection string
+# Parses data files and extracts the customer ID an matches with a connection string.
 #-------------------------------------------------------------------------
 
 proc ParseFile {filename ConfigPath} {
@@ -106,7 +106,7 @@ proc ParseFile {filename ConfigPath} {
     return 0
 }
 
-# Sends files via sftp or smb
+# Sends files via sftp or smb.
 #-------------------------------------------------------------------------
 
 proc SendFile {file connectionstring} {
@@ -166,7 +166,7 @@ proc SendFile {file connectionstring} {
     }
 }
 
-# moves files that have been succesffully processed
+# moves files that have been succesffully processed.
 #-------------------------------------------------------------------------
 
 proc MoveFile {filename} {
@@ -190,7 +190,7 @@ proc printDir { inlist } {
      }
 }
 
-# Finds customer number in the data files
+# Finds customer number in the data files.
 #-------------------------------------------------------------------------
 proc FindCustomerNumber {filelist} {
      foreach item $filelist {
@@ -204,7 +204,7 @@ proc FindCustomerNumber {filelist} {
      }
 }
 
-# Returns Customer by index in the dict (array)
+# Returns Customer by index in the dict (array).
 #--------------------------------------------------------------------------
 
 proc getCustomerbyIndex {CustomerDict Index} {
@@ -212,7 +212,7 @@ proc getCustomerbyIndex {CustomerDict Index} {
     return $Customer
 }
 
-# Reads data files and matches them to customers, returns connection string
+# Reads data files and matches them to customers, returns connection string.
 #--------------------------------------------------------------------------
 
 proc ProcessCustomer {path configpath} {
