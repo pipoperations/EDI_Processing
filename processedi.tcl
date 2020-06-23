@@ -192,6 +192,7 @@ proc printDir { inlist } {
 
 # Finds customer number in the data files.
 #-------------------------------------------------------------------------
+
 proc FindCustomerNumber {filelist} {
      foreach item $filelist {
              if { [llength $filelist] > 1 } {
