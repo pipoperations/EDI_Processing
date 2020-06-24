@@ -7,8 +7,7 @@
 ## AUTHOR
 ##  Brian P. Wood
 ##
-## TODO
-##  Implement SMB for CommerciaHub
+## TODO: Implement SMB for CommerciaHub  
 ## 
 ## HISTORY
 ##  V0.01 05.30.2020 - Initial script for United Rentals
