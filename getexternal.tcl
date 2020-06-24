@@ -2,7 +2,7 @@
 ######################################################################
 ##
 ## NAME
-##  processedi.tcl
+##  getexternal.tcl
 ##
 ## AUTHOR
 ##  Brian P. Wood

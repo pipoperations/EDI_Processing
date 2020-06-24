@@ -7,7 +7,8 @@
 ## AUTHOR
 ##  Brian P. Wood
 ##
-## TODO: Implement SMB for CommerciaHub  
+## TODO: Implement SMB for CommerciaHub 
+## TODO: Maybe enhance with sqlite database file instead of txt customer files 
 ## 
 ## HISTORY
 ##  V0.01 05.30.2020 - Initial script for United Rentals
@@ -32,7 +33,7 @@
 #======================================================================
 
 set env(TERM) "xterm"
-#log_file -a /var/log/edi.log
+# log_file -a /var/log/edi.log
 set ConfigFile {opentest.txt}
 set Username ""
 set Password ""
