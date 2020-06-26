@@ -59,7 +59,6 @@ proc ListFiles {filepath} {
 # Proceedure to parse customer data files into a key value list
 #--------------------------------------------------------------------
 
-
 proc getCustomerData {filename} {
     set openFile [open $filename r]
     set data [read -nonewline $openFile]
