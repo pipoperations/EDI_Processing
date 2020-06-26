@@ -131,7 +131,7 @@ proc SendFile {file connectionstring} {
     if {[dict exists $connectionstring PullDirectory]} {
         set pullDirectory [dict get $connectionstring PullDirectory]
     } else {
-        set pushDirectory ""
+        set pullDirectory ""
     }
     puts "$protocol"
     switch $protocol {
