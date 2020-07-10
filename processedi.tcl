@@ -33,6 +33,7 @@
 #======================================================================
 
 set env(TERM) "xterm"
+set timeout 20
 # log_file -a /var/log/edi.log
 set ConfigFile {opentest.txt}
 set Username ""
@@ -152,7 +153,7 @@ proc SendFile {file connectionstring} {
             }
             expect "> " {send "cd $pushDirectory\r"}
             expect "> " { send "put $file\r" }
-            expect "> " { send "quit" }
+            expect "> " { send "quit\r" }
             return 0
         }
         smb {
