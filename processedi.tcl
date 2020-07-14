@@ -60,7 +60,6 @@ proc ListFiles {filepath} {
 # Proceedure to parse customer data files into a key value list.
 #--------------------------------------------------------------------
 
-
 proc getCustomerData {filename} {
     set openFile [open $filename r]
     set data [read -nonewline $openFile]
@@ -133,7 +132,7 @@ proc SendFile {file connectionstring} {
     if {[dict exists $connectionstring PullDirectory]} {
         set pullDirectory [dict get $connectionstring PullDirectory]
     } else {
-        set pushDirectory ""
+        set pullDirectory ""
     }
     puts "$protocol"
     switch $protocol {
