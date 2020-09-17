@@ -1,3 +1,13 @@
 # EDI_Processing
 TCL Code for EDI inbound and outbound connections.
-Version 0.0
+##  Customer files should be in this format
+##  CustomerName     ABC Corp
+##  CustomerNumber   1234
+##  Protocol         sftp
+##  Host       10.10.10.10
+##  Username         Brianisawesome
+##  Password         W3lc0m3!
+##  PushDirectory    ftp-in
+##  PullDirectory    ftp-out
+##  Use tabs between keys and values
+Version 0.1
