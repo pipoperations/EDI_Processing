@@ -221,6 +221,7 @@ proc FindCustomerNumber {filelist} {
 
 proc getCustomerbyIndex {CustomerDict Index} {
     set Customer [dict get $CustomerDict $Index]
+    
     return $Customer
 }
 
@@ -251,7 +252,12 @@ proc ProcessFilesOut {path configpath} {
 proc ProcessFilesIn {path} {
     set customerFiles [ListFiles $path]
     set list [CustomerList $customerFiles]
-    return $list
+    dict for {index customer} $list {
+        if {[dict exist $customer CustomerName]} {
+        append pullDirectory [dict get $customer PullDirectory] "\n"
+        } 
+    }
+    return $pullDirectory
 }
 
 #==========================================================================
@@ -264,7 +270,7 @@ puts "The date is: [clock format $systemTime -format %D]"
 puts [ProcessFilesOut $GlobalPathin $ConfigPath]
 
 # copy input files
-puts ProcessFilesIn $ConfigPath
+puts [ProcessFilesIn $ConfigPath]
 
 # expect -timeout -1 eof
 
