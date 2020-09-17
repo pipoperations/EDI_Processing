@@ -159,6 +159,17 @@ proc SendFile {file connectionstring} {
             puts "$connectionstring"
             return 0
         }
+        local{
+            ## Local file copy
+            ## IN
+            if {[string trim $pullDirectory] != ""} {
+                set filelist [ListFiles $pullDirectory]
+                foreach file $filelist {
+                    file rename $file [string cat /mnt/eclipse/msg-in/ [file tail $file]]
+                }
+            }
+            ## OUT
+        }
         default {
             puts "Invalid protocol"
             return -code error \ "protocol not set or invalid."
@@ -213,10 +224,10 @@ proc getCustomerbyIndex {CustomerDict Index} {
     return $Customer
 }
 
-# Reads data files and matches them to customers, returns connection string.
+# Reads data files and matches them to customers, then sends them via protocol
 #--------------------------------------------------------------------------
 
-proc ProcessCustomer {path configpath} {
+proc ProcessFilesOut {path configpath} {
     set dataFileList [ListFiles $path]
     foreach file $dataFileList {
         set hasCustomer [ParseFile $file $configpath]
@@ -234,12 +245,27 @@ proc ProcessCustomer {path configpath} {
     return 0
 }
 
+# Reads config files and looks for input files in the PushDirectory
+#--------------------------------------------------------------------------
+
+proc ProcessFilesIn {path} {
+    set customerFiles [ListFiles $path]
+    set list [CustomerList $customerFiles]
+    return $list
+}
+
 #==========================================================================
 # Main
 #==========================================================================
 
 puts "The time is: [clock format $systemTime -format %H:%M:%S]"
 puts "The date is: [clock format $systemTime -format %D]"
-puts [ProcessCustomer $GlobalPathin $ConfigPath]
+# copy output files
+puts [ProcessFilesOut $GlobalPathin $ConfigPath]
+
+# copy input files
+puts ProcessFilesIn [$Configpath]
+
 # expect -timeout -1 eof
+
 exit 0
