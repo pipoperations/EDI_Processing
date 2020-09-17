@@ -159,17 +159,17 @@ proc SendFile {file connectionstring} {
             puts "$connectionstring"
             return 0
         }
-        local{
-            ## Local file copy
-            ## IN
-            if {[string trim $pullDirectory] != ""} {
-                set filelist [ListFiles $pullDirectory]
-                foreach file $filelist {
-                    file rename $file [string cat /mnt/eclipse/msg-in/ [file tail $file]]
-                }
-            }
-            ## OUT
-        }
+#        local{
+#            ## Local file copy
+#            ## IN
+#            if {[string trim $pullDirectory] != ""} {
+#                set filelist [ListFiles $pullDirectory]
+#                foreach file $filelist {
+#                    file rename $file [string cat /mnt/eclipse/msg-in/ [file tail $file]]
+#                }
+#            }
+#            ## OUT
+#        }
         default {
             puts "Invalid protocol"
             return -code error \ "protocol not set or invalid."
@@ -177,15 +177,21 @@ proc SendFile {file connectionstring} {
     }
 }
 
-# moves files that have been succesffully processed.
+# moves outbound files that have been succesffully processed.
 #-------------------------------------------------------------------------
 
-proc MoveFile {filename} {
+proc MoveOutboundFile {filename} {
     # move file after success
     upvar 2 ProcessedPath path
     file rename $filename $path
 }
 
+# moves inbound files
+#-------------------------------------------------------------------------
+
+proc MoveInboundFile {from to} {
+    file rename $from $to
+}
 # gets a list of files from a directory
 #-------------------------------------------------------------------------
 
@@ -237,7 +243,7 @@ proc ProcessFilesOut {path configpath} {
             puts "Result code $success"
             if {$success == 0} {
                 # SendFile should return 0 if it is successful 
-                MoveFile $file
+                MoveOutboundFile $file
             }
         } else {
             puts "$file Doesn't have a customer $hasCustomer"
@@ -250,14 +256,24 @@ proc ProcessFilesOut {path configpath} {
 #--------------------------------------------------------------------------
 
 proc ProcessFilesIn {path} {
+    upvar GlobalPathout pathin
     set customerFiles [ListFiles $path]
     set list [CustomerList $customerFiles]
     dict for {index customer} $list {
-        if {[dict exist $customer CustomerName]} {
-        append pullDirectory [dict get $customer PullDirectory] "\n"
-        } 
+        if {[dict exist $customer PullDirectory]} {
+            set protocol [dict get $customer Protocol]
+            switch $protocol {
+                local {
+                    set directory [dict get $customer PullDirectory]
+                    foreach filename [ListFiles $directory] {
+                        MoveInboundFile $filename $pathin
+                    }
+                    
+                }
+            }
+        }
     }
-    return $pullDirectory
+    return 0
 }
 
 #==========================================================================
@@ -266,11 +282,12 @@ proc ProcessFilesIn {path} {
 
 puts "The time is: [clock format $systemTime -format %H:%M:%S]"
 puts "The date is: [clock format $systemTime -format %D]"
+
 # copy output files
-puts [ProcessFilesOut $GlobalPathin $ConfigPath]
+puts "Files out succeded [ProcessFilesOut $GlobalPathin $ConfigPath]"
 
 # copy input files
-puts [ProcessFilesIn $ConfigPath]
+puts "Files in succeded [ProcessFilesIn $ConfigPath]"
 
 # expect -timeout -1 eof
 
