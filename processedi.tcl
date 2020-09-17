@@ -264,7 +264,7 @@ puts "The date is: [clock format $systemTime -format %D]"
 puts [ProcessFilesOut $GlobalPathin $ConfigPath]
 
 # copy input files
-puts ProcessFilesIn [$Configpath]
+puts ProcessFilesIn $ConfigPath
 
 # expect -timeout -1 eof
 
