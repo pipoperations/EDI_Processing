@@ -159,7 +159,8 @@ proc SendFile {file connectionstring} {
             puts "$connectionstring"
             return 0
         }
-#        local{
+        local{
+            MoveInboundFile $file $pushDirectory
 #            ## Local file copy
 #            ## IN
 #            if {[string trim $pullDirectory] != ""} {
@@ -169,7 +170,8 @@ proc SendFile {file connectionstring} {
 #                }
 #            }
 #            ## OUT
-#        }
+            return 0
+        }
         default {
             puts "Invalid protocol"
             return -code error \ "protocol not set or invalid."
