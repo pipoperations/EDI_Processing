@@ -185,7 +185,7 @@ proc SendFile {file connectionstring} {
 proc MoveOutboundFile {filename} {
     # move file after success
     upvar 2 ProcessedPath path
-    file rename $filename $path
+    file rename -force $filename $path
 }
 
 # moves inbound files
