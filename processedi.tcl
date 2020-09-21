@@ -159,7 +159,7 @@ proc SendFile {file connectionstring} {
             puts "$connectionstring"
             return 0
         }
-        local{
+        local {
             MoveInboundFile $file $pushDirectory
 #            ## Local file copy
 #            ## IN
@@ -192,7 +192,7 @@ proc MoveOutboundFile {filename} {
 #-------------------------------------------------------------------------
 
 proc MoveInboundFile {from to} {
-    file rename $from $to
+    file copy $from $to
 }
 # gets a list of files from a directory
 #-------------------------------------------------------------------------
