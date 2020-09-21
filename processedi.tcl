@@ -192,7 +192,7 @@ proc MoveOutboundFile {filename} {
 #-------------------------------------------------------------------------
 
 proc MoveInboundFile {from to} {
-    file copy $from $to
+    file copy -force $from $to
 }
 # gets a list of files from a directory
 #-------------------------------------------------------------------------
@@ -268,7 +268,10 @@ proc ProcessFilesIn {path} {
                 local {
                     set directory [dict get $customer PullDirectory]
                     foreach filename [ListFiles $directory] {
+                        puts $filename
+                        puts $pathin
                         MoveInboundFile $filename $pathin
+                        MoveOutboundFile $filename
                     }
 
                 }
