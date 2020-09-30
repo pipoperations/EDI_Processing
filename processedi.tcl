@@ -193,6 +193,9 @@ proc MoveOutboundFile {filename} {
 
 proc MoveInboundFile {from to} {
     file copy -force $from $to
+    foreach filename [ListFiles $to] {
+        file attributes $filename -permissions 00666
+    }
 }
 # gets a list of files from a directory
 #-------------------------------------------------------------------------
