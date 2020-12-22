@@ -258,7 +258,8 @@ proc ProcessFilesOut {path configpath} {
 #--------------------------------------------------------------------------
 
 proc ProcessFilesIn {path} {
-    upvar GlobalPathout pathin
+    upvar GlobalPathout pathout
+    upvar GlobalPathin pathin
     set customerFiles [ListFiles $path]
     set list [CustomerList $customerFiles]
     dict for {index customer} $list {
@@ -269,11 +270,34 @@ proc ProcessFilesIn {path} {
                     set directory [dict get $customer PullDirectory]
                     foreach filename [ListFiles $directory] {
                         puts $filename
-                        puts $pathin
-                        MoveInboundFile $filename $pathin
+                        puts $pathout
+                        MoveInboundFile $filename $pathout
                         MoveOutboundFile $filename
                     }
 
+                }
+                sftp {
+                    set username [dict get $customer Username]
+                    set password [dict get $customer Password]
+                    set ipAddress [dict get $customer Host]
+                    set pullDirectory [dict get $customer PullDirectory]
+                    puts "$username $password $ipAddress"
+                    spawn sftp "$username@$ipAddress"
+                    expect {
+                        "assword:" {
+                           send "$password\r"
+                        }
+                        "yes/no" {
+                            send "yes\r"
+                        }
+                        "Permission"{
+                            return 0
+                        }
+                    }
+                    expect "> " {send "cd $pullDirectory\r"}
+                    expect "> " { send "mget * $pathin\r" }
+                    expect "> " { send "quit\r" }
+                    return 0
                 }
             }
         }

@@ -36,3 +36,26 @@ set GlobalPathin "/home/eclipseftp/ftp-in/"
 set GlobalPathout "/home/eclipseftp/ftp-out"
 set ConfigPath "/home/eclipseftp/scripts/config/"
 set ProcessedPath "/home/eclipseftp/processed/"
+
+
+## Test code
+
+## sftp {
+            puts "protectind Fast9Finding9Cook4$ protectind.sftp-test.commercehub.com"
+            spawn sftp "protectind@protectind.sftp-test.commercehub.com"
+            expect {
+                "assword:" {
+                    send "Fast9Finding9Cook4$\r"
+                }
+                "yes/no" {
+                    send "yes\r"
+                }
+                "Permission"{
+                    return 0
+                }
+            }
+            expect "> " {send "mget logs/* /home/eclipseftp/processed/\r"}
+            ## expect "> " { send "put $file\r" }
+            expect "> " { send "quit\r" }
+##            return 0
+##        }
