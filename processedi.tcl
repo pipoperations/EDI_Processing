@@ -185,7 +185,7 @@ proc SendFile {file connectionstring} {
 proc MoveOutboundFile {filename} {
     # move file after success
     upvar 2 ProcessedPath path
-    file rename $filename $path
+    file rename -force $filename $path
 }
 
 # moves inbound files
@@ -193,6 +193,9 @@ proc MoveOutboundFile {filename} {
 
 proc MoveInboundFile {from to} {
     file copy -force $from $to
+    foreach filename [ListFiles $to] {
+        file attributes $filename -permissions 00666
+    }
 }
 # gets a list of files from a directory
 #-------------------------------------------------------------------------
