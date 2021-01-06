@@ -192,6 +192,7 @@ proc MoveOutboundFile {filename} {
 #-------------------------------------------------------------------------
 
 proc MoveInboundFile {from to} {
+    file attributes $file -group eclipseftp -permissions 00660
     file copy -force $from $to
 }
 # gets a list of files from a directory
