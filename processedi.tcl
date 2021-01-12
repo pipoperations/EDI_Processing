@@ -296,8 +296,16 @@ proc ProcessFilesIn {path} {
                         }
                     }
                     expect "> " {send "cd $pullDirectory\r"}
-                    expect "> " {send "mget * $pathout\r" }
-                    expect "> " {send "rm * \r"}
+                    expect "> " { send "mget * $pathout\r"}
+                    expect {
+                        " not found." {
+                            send "quit\r"
+                            continue
+                        }
+                        "> " {
+                            send "rm * \r"
+                        }  
+                    } 
                     expect "> " {send "quit\r" }
                     file attributes "$pathout\*" -group eclipseftp -permissions 00666
                 }
