@@ -275,7 +275,6 @@ proc ProcessFilesIn {path} {
                         MoveInboundFile $filename $pathout
                         MoveOutboundFile $filename
                     }
-
                 }
                 sftp {
                     set username [dict get $customer Username]
@@ -292,13 +291,15 @@ proc ProcessFilesIn {path} {
                             send "yes\r"
                         }
                         "Permission"{
-                            return 0
+                            close
+                            continue
                         }
                     }
                     expect "> " {send "cd $pullDirectory\r"}
-                    expect "> " { send "mget * $pathin\r" }
-                    expect "> " { send "quit\r" }
-                    return 0
+                    expect "> " {send "mget * $pathout\r" }
+                    expect "> " {send "rm * \r"}
+                    expect "> " {send "quit\r" }
+                    file attributes "$pathout\*" -group eclipseftp -permissions 00666
                 }
             }
         }
