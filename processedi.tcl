@@ -177,6 +177,7 @@ proc SendFile {file connectionstring} {
 proc MoveOutboundFile {filename} {
     # move file after success
     upvar 2 ProcessedPath path
+    puts "$filename $path"
     file rename $filename $path
 }
 
@@ -184,6 +185,7 @@ proc MoveOutboundFile {filename} {
 #-------------------------------------------------------------------------
 
 proc MoveInboundFile {from to} {
+    file attributes $from -group eclipseftp -permissions 00666
     file copy -force $from $to
 }
 # gets a list of files from a directory
@@ -249,7 +251,7 @@ proc ProcessFilesOut {path configpath} {
 # Reads config files and looks for input files in the PushDirectory
 #--------------------------------------------------------------------------
 
-proc ProcessFilesIn {pathin path} {
+proc ProcessFilesIn {pathout path} {
 #    upvar GlobalPathout pathin
     set customerFiles [ListFiles $path]
     set list [CustomerList $customerFiles]
@@ -261,11 +263,43 @@ proc ProcessFilesIn {pathin path} {
                     set directory [dict get $customer PullDirectory]
                     foreach filename [ListFiles $directory] {
                         puts $filename
-                        puts $pathin
-                        MoveInboundFile $filename $pathin
+                        puts $pathout
+                        MoveInboundFile $filename $pathout
                         MoveOutboundFile $filename
                     }
-
+                }
+                sftp {
+                    set username [dict get $customer Username]
+                    set password [dict get $customer Password]
+                    set ipAddress [dict get $customer Host]
+                    set pullDirectory [dict get $customer PullDirectory]
+                    puts "$username $password $ipAddress"
+                    spawn sftp "$username@$ipAddress"
+                    expect {
+                        "assword:" {
+                           send "$password\r"
+                        }
+                        "yes/no" {
+                            send "yes\r"
+                        }
+                        "Permission"{
+                            close
+                            continue
+                        }
+                    }
+                    expect "> " {send "cd $pullDirectory\r"}
+                    expect "> " { send "mget * $pathout\r"}
+                    expect {
+                        " not found." {
+                            send "quit\r"
+                            continue
+                        }
+                        "> " {
+                            send "rm * \r"
+                        }  
+                    } 
+                    expect "> " {send "quit\r" }
+                    file attributes "$pathout/*" -group eclipseftp -permissions 00666
                 }
             }
         }
