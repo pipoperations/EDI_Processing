@@ -258,10 +258,12 @@ proc ProcessFilesIn {pathout path} {
     dict for {index customer} $list {
         if {[dict exist $customer PullDirectory]} {
             set protocol [dict get $customer Protocol]
+            set customername [dict get $customer CustomerName]
             switch $protocol {
                 local {
                     set directory [dict get $customer PullDirectory]
                     foreach filename [ListFiles $directory] {
+                        puts $customername
                         puts $filename
                         puts $pathout
                         MoveInboundFile $filename $pathout
@@ -273,7 +275,8 @@ proc ProcessFilesIn {pathout path} {
                     set password [dict get $customer Password]
                     set ipAddress [dict get $customer Host]
                     set pullDirectory [dict get $customer PullDirectory]
-                    puts "$username $password $ipAddress"
+                    puts $customername
+                    ## puts "$username $password $ipAddress"
                     spawn sftp "$username@$ipAddress"
                     expect {
                         "assword:" {
