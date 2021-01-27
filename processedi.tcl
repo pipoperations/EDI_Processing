@@ -9,6 +9,7 @@
 ##
 ## TODO: Implement SMB for CommerciaHub
 ## TODO: Maybe enhance with sqlite database file instead of txt customer files
+## TODO: #11 Implement copy of processed files for Logo Team
 ##
 ## HISTORY
 ##  V0.01 05.30.2020 - Initial script for United Rentals
@@ -161,15 +162,6 @@ proc SendFile {file connectionstring} {
         }
         local {
             MoveInboundFile $file $pushDirectory
-#            ## Local file copy
-#            ## IN
-#            if {[string trim $pullDirectory] != ""} {
-#                set filelist [ListFiles $pullDirectory]
-#                foreach file $filelist {
-#                    file rename $file [string cat /mnt/eclipse/msg-in/ [file tail $file]]
-#                }
-#            }
-#            ## OUT
             return 0
         }
         default {
@@ -257,8 +249,8 @@ proc ProcessFilesOut {path configpath} {
 # Reads config files and looks for input files in the PushDirectory
 #--------------------------------------------------------------------------
 
-proc ProcessFilesIn {path} {
-    upvar GlobalPathout pathin
+proc ProcessFilesIn {pathin path} {
+#    upvar GlobalPathout pathin
     set customerFiles [ListFiles $path]
     set list [CustomerList $customerFiles]
     dict for {index customer} $list {
@@ -292,7 +284,7 @@ puts "The date is: [clock format $systemTime -format %D]"
 puts "Files out succeded [ProcessFilesOut $GlobalPathin $ConfigPath]"
 
 # copy input files
-puts "Files in succeded [ProcessFilesIn $ConfigPath]"
+puts "Files in succeded [ProcessFilesIn $GlobalPathout $ConfigPath]"
 
 # expect -timeout -1 eof
 
