@@ -135,6 +135,7 @@ proc SendFile {file connectionstring} {
     } else {
         set pullDirectory ""
     }
+    puts "$customerName"
     puts "$protocol"
     switch $protocol {
         sftp {
@@ -185,6 +186,7 @@ proc MoveOutboundFile {filename} {
 #-------------------------------------------------------------------------
 
 proc MoveInboundFile {from to} {
+    # move local file from drop to pushdirectory
     file attributes $from -group eclipseftp -permissions 00666
     file copy -force $from $to
 }
@@ -234,6 +236,7 @@ proc ProcessFilesOut {path configpath} {
     set dataFileList [ListFiles $path]
     foreach file $dataFileList {
         set hasCustomer [ParseFile $file $configpath]
+        puts $hasCustomer
         if { $hasCustomer > 0 } {
             set success [SendFile $file $hasCustomer]
             puts "Result code $success"
@@ -302,7 +305,9 @@ proc ProcessFilesIn {pathout path} {
                         }  
                     } 
                     expect "> " {send "quit\r" }
-                    file attributes "$pathout/*" -group eclipseftp -permissions 00666
+                    foreach file [ListFiles $pathout] {
+                        file attributes $file -group eclipseftp -permissions 00666
+                    }
                 }
             }
         }
