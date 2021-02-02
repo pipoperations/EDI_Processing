@@ -110,7 +110,7 @@ proc ParseFile {filename ConfigPath} {
 # Sends files via sftp or smb.
 #-------------------------------------------------------------------------
 
-proc SendFile {file connectionstring} {
+proc SendFile {file connectionstring } {
 
     ## populate our working variables from the customer dictionary of key value pairs
 
@@ -175,12 +175,16 @@ proc SendFile {file connectionstring} {
 # moves outbound files that have been succesffully processed.
 #-------------------------------------------------------------------------
 
-proc MoveOutboundFile {filename} {
+proc MoveOutboundFile {filename customer} {
     # move file after success
     upvar 2 ProcessedPath path
-    puts "$filename $path"
-    file rename $filename $path
-}
+    puts "$filename $path name=$customer"
+    set fullpath "$path/$customer"
+    if { [file exists $fullpath] == 0 } {
+        exec mkdir $fullpath
+    }
+    file rename $filename $fullpath
+    }
 
 # moves inbound files
 #-------------------------------------------------------------------------
@@ -188,6 +192,9 @@ proc MoveOutboundFile {filename} {
 proc MoveInboundFile {from to} {
     # move local file from drop to pushdirectory
     file attributes $from -group eclipseftp -permissions 00666
+    if { [file exists $to] == 0 } {
+        exec mkdir $to
+    }
     file copy -force $from $to
 }
 # gets a list of files from a directory
@@ -238,11 +245,12 @@ proc ProcessFilesOut {path configpath} {
         set hasCustomer [ParseFile $file $configpath]
         puts $hasCustomer
         if { $hasCustomer > 0 } {
-            set success [SendFile $file $hasCustomer]
+            set customerName [dict get $hasCustomer CustomerName]
+            set success [SendFile $file $hasCustomer] # Calls the SendFile proc sending the array
             puts "Result code $success"
             if {$success == 0} {
                 # SendFile should return 0 if it is successful
-                MoveOutboundFile $file
+                MoveOutboundFile $file $customername
             }
         } else {
             puts "$file Doesn't have a customer $hasCustomer"
@@ -256,6 +264,7 @@ proc ProcessFilesOut {path configpath} {
 
 proc ProcessFilesIn {pathout path} {
 #    upvar GlobalPathout pathin
+    upvar ProcessedPath processedpath
     set customerFiles [ListFiles $path]
     set list [CustomerList $customerFiles]
     dict for {index customer} $list {
@@ -270,7 +279,7 @@ proc ProcessFilesIn {pathout path} {
                         puts $filename
                         puts $pathout
                         MoveInboundFile $filename $pathout
-                        MoveOutboundFile $filename
+                        MoveOutboundFile $filename $customername
                     }
                 }
                 sftp {
@@ -307,6 +316,9 @@ proc ProcessFilesIn {pathout path} {
                     expect "> " {send "quit\r" }
                     foreach file [ListFiles $pathout] {
                         file attributes $file -group eclipseftp -permissions 00666
+                        set fullprocessedpath "$processedpath/$customername"
+                        MoveInboundFile $file $fullprocessedpath
+
                     }
                 }
             }
@@ -319,6 +331,7 @@ proc ProcessFilesIn {pathout path} {
 # Main
 #==========================================================================
 
+puts "Starting script"
 puts "The time is: [clock format $systemTime -format %H:%M:%S]"
 puts "The date is: [clock format $systemTime -format %D]"
 
