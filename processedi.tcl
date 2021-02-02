@@ -178,7 +178,6 @@ proc SendFile {file connectionstring } {
 proc MoveOutboundFile {filename customer} {
     # move file after success
     upvar 2 ProcessedPath path
-    puts "$filename $path name=$customer"
     set fullpath "$path/$customer"
     if { [file exists $fullpath] == 0 } {
         exec mkdir $fullpath
@@ -243,10 +242,9 @@ proc ProcessFilesOut {path configpath} {
     set dataFileList [ListFiles $path]
     foreach file $dataFileList {
         set hasCustomer [ParseFile $file $configpath]
-        puts $hasCustomer
         if { $hasCustomer > 0 } {
-            set customerName [dict get $hasCustomer CustomerName]
-            set success [SendFile $file $hasCustomer] # Calls the SendFile proc sending the array
+            set customername [dict get $hasCustomer CustomerName]
+            set success [SendFile $file $hasCustomer]
             puts "Result code $success"
             if {$success == 0} {
                 # SendFile should return 0 if it is successful
@@ -274,10 +272,8 @@ proc ProcessFilesIn {pathout path} {
             switch $protocol {
                 local {
                     set directory [dict get $customer PullDirectory]
+                    puts $customername
                     foreach filename [ListFiles $directory] {
-                        puts $customername
-                        puts $filename
-                        puts $pathout
                         MoveInboundFile $filename $pathout
                         MoveOutboundFile $filename $customername
                     }
