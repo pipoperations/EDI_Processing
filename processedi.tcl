@@ -13,6 +13,7 @@
 ##
 ## HISTORY
 ##  V0.01 05.30.2020 - Initial script for United Rentals
+##  V0.02 02.03.2021 - commercehub code added
 ##
 ## NOTES
 ##  This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
