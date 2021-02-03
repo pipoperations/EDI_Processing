@@ -9,9 +9,11 @@
 ##
 ## TODO: Implement SMB for CommerciaHub
 ## TODO: Maybe enhance with sqlite database file instead of txt customer files
+## TODO: #11 Implement copy of processed files for Logo Team
 ##
 ## HISTORY
 ##  V0.01 05.30.2020 - Initial script for United Rentals
+##  V0.02 02.03.2021 - commercehub code added
 ##
 ## NOTES
 ##  This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
@@ -109,7 +111,7 @@ proc ParseFile {filename ConfigPath} {
 # Sends files via sftp or smb.
 #-------------------------------------------------------------------------
 
-proc SendFile {file connectionstring} {
+proc SendFile {file connectionstring } {
 
     ## populate our working variables from the customer dictionary of key value pairs
 
@@ -134,6 +136,7 @@ proc SendFile {file connectionstring} {
     } else {
         set pullDirectory ""
     }
+    puts "$customerName"
     puts "$protocol"
     switch $protocol {
         sftp {
@@ -161,15 +164,6 @@ proc SendFile {file connectionstring} {
         }
         local {
             MoveInboundFile $file $pushDirectory
-#            ## Local file copy
-#            ## IN
-#            if {[string trim $pullDirectory] != ""} {
-#                set filelist [ListFiles $pullDirectory]
-#                foreach file $filelist {
-#                    file rename $file [string cat /mnt/eclipse/msg-in/ [file tail $file]]
-#                }
-#            }
-#            ## OUT
             return 0
         }
         default {
@@ -182,17 +176,25 @@ proc SendFile {file connectionstring} {
 # moves outbound files that have been succesffully processed.
 #-------------------------------------------------------------------------
 
-proc MoveOutboundFile {filename} {
+proc MoveOutboundFile {filename customer} {
     # move file after success
     upvar 2 ProcessedPath path
-    file rename -force $filename $path
+    set fullpath "$path/$customer"
+    if { [file exists $fullpath] == 0 } {
+        exec mkdir $fullpath
+    }
+    file rename $filename $fullpath
 }
 
 # moves inbound files
 #-------------------------------------------------------------------------
 
 proc MoveInboundFile {from to} {
+    # move local file from drop to pushdirectory
     file attributes $from -group eclipseftp -permissions 00666
+    if { [file exists $to] == 0 } {
+        exec mkdir $to
+    }
     file copy -force $from $to
     foreach filename [ListFiles $to] {
         file attributes $filename -permissions 00666
@@ -245,11 +247,12 @@ proc ProcessFilesOut {path configpath} {
     foreach file $dataFileList {
         set hasCustomer [ParseFile $file $configpath]
         if { $hasCustomer > 0 } {
+            set customername [dict get $hasCustomer CustomerName]
             set success [SendFile $file $hasCustomer]
             puts "Result code $success"
             if {$success == 0} {
                 # SendFile should return 0 if it is successful
-                MoveOutboundFile $file
+                MoveOutboundFile $file $customername
             }
         } else {
             puts "$file Doesn't have a customer $hasCustomer"
@@ -261,22 +264,22 @@ proc ProcessFilesOut {path configpath} {
 # Reads config files and looks for input files in the PushDirectory
 #--------------------------------------------------------------------------
 
-proc ProcessFilesIn {path} {
-    upvar GlobalPathout pathout
-    upvar GlobalPathin pathin
+proc ProcessFilesIn {pathout path} {
+#    upvar GlobalPathout pathin
+    upvar ProcessedPath processedpath
     set customerFiles [ListFiles $path]
     set list [CustomerList $customerFiles]
     dict for {index customer} $list {
         if {[dict exist $customer PullDirectory]} {
             set protocol [dict get $customer Protocol]
+            set customername [dict get $customer CustomerName]
             switch $protocol {
                 local {
                     set directory [dict get $customer PullDirectory]
+                    puts $customername
                     foreach filename [ListFiles $directory] {
-                        puts $filename
-                        puts $pathout
                         MoveInboundFile $filename $pathout
-                        MoveOutboundFile $filename
+                        MoveOutboundFile $filename $customername
                     }
                 }
                 sftp {
@@ -284,7 +287,8 @@ proc ProcessFilesIn {path} {
                     set password [dict get $customer Password]
                     set ipAddress [dict get $customer Host]
                     set pullDirectory [dict get $customer PullDirectory]
-                    puts "$username $password $ipAddress"
+                    puts $customername
+                    ## puts "$username $password $ipAddress"
                     spawn sftp "$username@$ipAddress"
                     expect {
                         "assword:" {
@@ -310,7 +314,12 @@ proc ProcessFilesIn {path} {
                         }  
                     } 
                     expect "> " {send "quit\r" }
-                    file attributes "$pathout\*" -group eclipseftp -permissions 00666
+                    foreach file [ListFiles $pathout] {
+                        file attributes $file -group eclipseftp -permissions 00666
+                        set fullprocessedpath "$processedpath/$customername"
+                        MoveInboundFile $file $fullprocessedpath
+
+                    }
                 }
             }
         }
@@ -322,6 +331,7 @@ proc ProcessFilesIn {path} {
 # Main
 #==========================================================================
 
+puts "Starting script"
 puts "The time is: [clock format $systemTime -format %H:%M:%S]"
 puts "The date is: [clock format $systemTime -format %D]"
 
@@ -329,7 +339,7 @@ puts "The date is: [clock format $systemTime -format %D]"
 puts "Files out succeded [ProcessFilesOut $GlobalPathin $ConfigPath]"
 
 # copy input files
-puts "Files in succeded [ProcessFilesIn $ConfigPath]"
+puts "Files in succeded [ProcessFilesIn $GlobalPathout $ConfigPath]"
 
 # expect -timeout -1 eof
 
