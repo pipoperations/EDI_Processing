@@ -184,7 +184,7 @@ proc MoveOutboundFile {filename customer} {
         exec mkdir $fullpath
     }
     file rename $filename $fullpath
-    }
+}
 
 # moves inbound files
 #-------------------------------------------------------------------------
@@ -196,6 +196,9 @@ proc MoveInboundFile {from to} {
         exec mkdir $to
     }
     file copy -force $from $to
+    foreach filename [ListFiles $to] {
+        file attributes $filename -permissions 00666
+    }
 }
 # gets a list of files from a directory
 #-------------------------------------------------------------------------
