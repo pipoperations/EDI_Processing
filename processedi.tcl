@@ -15,9 +15,9 @@
 ##
 ## NOTES
 ##  This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
-##  Customer files should be in this format
+##  customer files should be in this format
 ##  CustomerName     ABC Corp
-##  CustomerNumber   1234
+##  customerNumber   1234
 ##  Protocol         sftp
 ##  Host       10.10.10.10
 ##  Username         Brianisawesome
@@ -60,18 +60,18 @@ proc ListFiles {filepath} {
 # Proceedure to parse customer data files into a key value list.
 #--------------------------------------------------------------------
 
-proc getCustomerData {filename} {
-    set openFile [open $filename r]
-    set data [read -nonewline $openFile]
-    close $openFile
+proc GetCustomerData {filename} {
+    set openfile [open $filename r]
+    set data [read -nonewline $openfile]
+    close $openfile
     ## split the file into lines
-    set dataList [split $data "\n"]
+    set datalist [split $data "\n"]
     ## parse each line for key/value pairs with tab "\t" as the delimiter
-    foreach dataLine $dataList {
-        lappend CustomerData [string trim [string range $dataLine 0 [string first "\t" $dataLine]]]
-        lappend CustomerData [string trim [string range $dataLine [string first "\t" $dataLine] [string length $dataLine]]]
+    foreach dataline $datalist {
+        lappend customerdata [string trim [string range $dataline 0 [string first "\t" $dataline]]]
+        lappend customerdata [string trim [string range $dataline [string first "\t" $dataline] [string length $dataline]]]
     }
-     return $CustomerData
+     return $customerdata
 }
 
 # Returns a dictionary of customers given a directly list of config files.
@@ -81,23 +81,23 @@ proc CustomerList {filelist} {
     set index 0
     foreach file $filelist {
         incr index
-        dict set Customer $index [getCustomerData $file]
+        dict set customer $index [GetCustomerData $file]
     }
-    return $Customer
+    return $customer
 }
 
 # Parses data files and extracts the customer ID an matches with a connection string.
 #-------------------------------------------------------------------------
 
-proc ParseFile {filename ConfigPath} {
+proc ParseFile {filename configpath} {
     # search file for unique key
     set dataFile [open $filename r]
-    set dataLine [gets $dataFile]
+    set dataline [gets $dataFile]
     close $dataFile
-    set Customers [CustomerList [ListFiles $ConfigPath]]
-    dict for {index customer} $Customers {
-        set CustomerNumber [dict get $customer CustomerNumber]
-        set occurs [string first $CustomerNumber $dataLine]
+    set customers [CustomerList [ListFiles $configpath]]
+    dict for {index customer} $customers {
+        set customerNumber [dict get $customer customerNumber]
+        set occurs [string first $customerNumber $dataline]
         if { $occurs > 0 } {
             # return filename, and connection info (protocol, ip address, username, password)
             return $customer
@@ -115,30 +115,30 @@ proc SendFile {file connectionstring} {
 
     set username [dict get $connectionstring Username]
     set password [dict get $connectionstring Password]
-    set ipAddress [dict get $connectionstring Host]
+    set ipaddress [dict get $connectionstring Host]
     set protocol [dict get $connectionstring Protocol]
-    set customerName [dict get $connectionstring CustomerName]
+    set customername [dict get $connectionstring CustomerName]
 
     ## make sure that a value exists for the PushDirectory
 
     if {[dict exists $connectionstring PushDirectory]} {
-        set pushDirectory [dict get $connectionstring PushDirectory]
+        set pushdirectory [dict get $connectionstring PushDirectory]
     } else {
-        set pushDirectory ""
+        set pushdirectory ""
     }
 
     ## make sure that a value exists for the PullDirectory
 
     if {[dict exists $connectionstring PullDirectory]} {
-        set pullDirectory [dict get $connectionstring PullDirectory]
+        set pulldirectory [dict get $connectionstring PullDirectory]
     } else {
-        set pullDirectory ""
+        set pulldirectory ""
     }
     puts "$protocol"
     switch $protocol {
         sftp {
-            puts "$username $password $ipAddress"
-            spawn sftp "$username@$ipAddress"
+            puts "$username $password $ipaddress"
+            spawn sftp "$username@$ipaddress"
             expect {
                 "assword:" {
                     send "$password\r"
@@ -150,7 +150,7 @@ proc SendFile {file connectionstring} {
                     return 0
                 }
             }
-            expect "> " {send "cd $pushDirectory\r"}
+            expect "> " {send "cd $pushdirectory\r"}
             expect "> " { send "put $file\r" }
             expect "> " { send "quit\r" }
             return 0
@@ -160,11 +160,11 @@ proc SendFile {file connectionstring} {
             return 0
         }
         local {
-            MoveInboundFile $file $pushDirectory
+            MoveInboundFile $file $pushdirectory
 #            ## Local file copy
 #            ## IN
-#            if {[string trim $pullDirectory] != ""} {
-#                set filelist [ListFiles $pullDirectory]
+#            if {[string trim $pulldirectory] != ""} {
+#                set filelist [ListFiles $pulldirectory]
 #                foreach file $filelist {
 #                    file rename $file [string cat /mnt/eclipse/msg-in/ [file tail $file]]
 #                }
@@ -184,8 +184,8 @@ proc SendFile {file connectionstring} {
 
 proc MoveOutboundFile {filename} {
     # move file after success
-    upvar 2 ProcessedPath path
-    file rename $filename $path
+    upvar 2 ProcessedPath pathname
+    file rename $filename $pathname
 }
 
 # moves inbound files
@@ -197,10 +197,10 @@ proc MoveInboundFile {from to} {
 # gets a list of files from a directory
 #-------------------------------------------------------------------------
 
-proc printDir { inlist } {
+proc PrintDir { inlist } {
      foreach item $inlist {
              if { [llength $inlist] > 1 } {
-                    printDir $item
+                    PrintDir $item
              } else {
                     # Place holder for ParseFile
                     puts "parse procedure $item"
@@ -224,31 +224,31 @@ proc FindCustomerNumber {filelist} {
      }
 }
 
-# Returns Customer by index in the dict (array).
+# Returns customer by index in the dict (array).
 #--------------------------------------------------------------------------
 
-proc getCustomerbyIndex {CustomerDict Index} {
-    set Customer [dict get $CustomerDict $Index]
+proc GetCustomerbyIndex {customercict index} {
+    set customer [dict get $customercict $index]
 
-    return $Customer
+    return $customer
 }
 
 # Reads data files and matches them to customers, then sends them via protocol
 #--------------------------------------------------------------------------
 
-proc ProcessFilesOut {path configpath} {
-    set dataFileList [ListFiles $path]
-    foreach file $dataFileList {
-        set hasCustomer [ParseFile $file $configpath]
-        if { $hasCustomer > 0 } {
-            set success [SendFile $file $hasCustomer]
+proc ProcessFilesOut {pathname configpath} {
+    set datafilelist [ListFiles $pathname]
+    foreach file $datafilelist {
+l       set hascustomer [ParseFile $file $configpath]
+        if { $hascustomer > 0 } {
+            set success [SendFile $file $hascustomer]
             puts "Result code $success"
             if {$success == 0} {
                 # SendFile should return 0 if it is successful
                 MoveOutboundFile $file
             }
         } else {
-            puts "$file Doesn't have a customer $hasCustomer"
+            puts "$file Doesn't have a customer $hascustomer"
         }
     }
     return 0
@@ -257,10 +257,10 @@ proc ProcessFilesOut {path configpath} {
 # Reads config files and looks for input files in the PushDirectory
 #--------------------------------------------------------------------------
 
-proc ProcessFilesIn {path} {
+proc ProcessFilesIn {pathname} {
     upvar GlobalPathout pathin
-    set customerFiles [ListFiles $path]
-    set list [CustomerList $customerFiles]
+    set customerfilelist [ListFiles $pathname]
+    set list [CustomerList $customerfilelist]
     dict for {index customer} $list {
         if {[dict exist $customer PullDirectory]} {
             set protocol [dict get $customer Protocol]
