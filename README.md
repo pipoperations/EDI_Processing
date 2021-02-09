@@ -10,4 +10,7 @@ TCL Code for EDI inbound and outbound connections.
 ##  PushDirectory    ftp-in
 ##  PullDirectory    ftp-out
 ##  Use tabs between keys and values
+Version 0.2
+## Move processed files to smb share by customername
 Version 0.1
+## Initial scripting for EDI in/out
