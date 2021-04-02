@@ -179,7 +179,7 @@ proc MoveOutboundFile {filename customer} {
     # move file after success
     upvar 2 ProcessedPath path
     set systemTime [clock seconds]
-    set month [clock format $systemTime -format %b]
+    set month [clock format $systemTime -format %b-%Y]
     set pathcheck "$path/$customer"
     if { [file exists $pathcheck] == 0 } {
         exec mkdir $pathcheck
@@ -342,7 +342,9 @@ puts "Files out succeded [ProcessFilesOut $GlobalPathin $ConfigPath]"
 
 # copy input files
 puts "Files in succeded [ProcessFilesIn $GlobalPathout $ConfigPath]"
-
+set systemTime [clock seconds]
+set month [clock format $systemTime -format %b-%Y]
+puts $month
 # expect -timeout -1 eof
 
 exit 0
