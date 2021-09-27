@@ -1,0 +1,8 @@
+CustomerName	Mohawk
+CustomerNumber	ZZ:MOHAWKTEST
+Protocol	smb
+Host	
+Username	
+Password	
+PushDirectory	/home/mohawksftp/ftp-in
+PullDirectory

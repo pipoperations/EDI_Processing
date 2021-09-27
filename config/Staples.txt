@@ -1,0 +1,8 @@
+CustomerName	"Staples"
+CustomerNumber	5082531642CH
+Protocol	sftp
+Host	protectind.sftp.commercehub.com
+Username	protectind
+Password	Collect54ward#Complain8
+PushDirectory	incoming/intchg
+PullDirectory	outgoing/intchg

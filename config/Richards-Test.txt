@@ -1,0 +1,8 @@
+CustomerName	"Richards"
+CustomerNumber	9999999CH
+Protocol	local
+Host	localhost
+Username	protectind
+Password	Collect54ward#Complain8
+PushDirectory	/home/richards-sftp/ftp-out-test
+PullDirectory	/home/richards-sftp-ftp-in-test

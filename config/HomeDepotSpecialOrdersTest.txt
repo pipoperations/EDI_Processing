@@ -1,0 +1,8 @@
+CustomerName	HomeDepot
+CustomerNumber	7704338211CHQT
+Protocol	sftp
+Host	westchester.sftp-test.commercehub.com
+Username	westchester
+Password	Wide1y8Window7Scale6$
+PushDirectory	incoming/intchg
+PullDirectory	outgoing/intchg

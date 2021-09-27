@@ -1,0 +1,9 @@
+CustomerName	"World Wide Protective"
+CustomerNumber	163636934
+Protocol	local
+Host	localhost
+Username	Prprod
+Password	Pro@123p
+PushDirectory	/home/eclipseftp/WWP-out
+PullDirectory	/home/eclipseftp/WWP-in
+

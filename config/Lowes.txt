@@ -1,0 +1,8 @@
+CustomerName	Lowes-HomeDepot
+CustomerNumber	7047581000CH
+Protocol	sftp
+Host	westchester.sftp.commercehub.com
+Username	westchester
+Password	Away8Chair0Believe7$
+PushDirectory	incoming/intchg
+PullDirectory	outgoing/intchg
