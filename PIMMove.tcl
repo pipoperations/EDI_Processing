@@ -85,6 +85,6 @@ proc eclipsetopim {pathfrom pathto} {
 # main
 #--------------------------------------------------------------------
 
-puts [clock format $date -format {%m-%d-%y}]
+puts [clock format $date]
 pimtoeclipse $pimexportpath $msginpath
 eclipsetopim $msginpath $pimimportpath
