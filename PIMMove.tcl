@@ -34,7 +34,7 @@ proc ListFiles {filepath} {
     return $filelist
 }
 
-# moves inbound files
+# moves files proceedure
 #-------------------------------------------------------------------------
 
 proc MoveInboundFile {from to} {
@@ -42,9 +42,8 @@ proc MoveInboundFile {from to} {
     file copy -force $from $to
 }
 
-# procedure to get modified date from file
+# procedure to move files from PIM Export to eclipse msg-in
 #--------------------------------------------------------------------
-puts [clock format $date -format {%m-%d-%y}]
 
 proc pimtoeclipse {pathfrom pathto} {
     upvar #0 date mydate
@@ -60,6 +59,8 @@ proc pimtoeclipse {pathfrom pathto} {
     }
 }
 
+# procedure to move files from eclipse msg-in to PIM Import
+#--------------------------------------------------------------------
 
 proc eclipsetopim {pathfrom pathto} {
     upvar #0 date mydate
@@ -79,6 +80,9 @@ proc eclipsetopim {pathfrom pathto} {
     }
 }
 
-pimtoeclipse $pimexportpath $msginpath
+# main
+#--------------------------------------------------------------------
 
+puts [clock format $date -format {%m-%d-%y}]
+pimtoeclipse $pimexportpath $msginpath
 eclipsetopim $msginpath $pimimportpath
