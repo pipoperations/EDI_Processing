@@ -13,10 +13,12 @@
 ##  V0.01 09.30.2021 - Initial script
 ##  
 ## NOTES 
+##  This program moves files from the PIM export to eclipse and New products file from eclipse msg-in to PIM import
 ##
 #######################################################################
 
 ## Constants
+#--------------------------------------------------------------------
 
 set pimexportpath /mnt/cifs-prod/import
 set msginpath /mnt/eclipse/msg-in
