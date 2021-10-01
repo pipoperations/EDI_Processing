@@ -18,9 +18,9 @@
 
 ## Constants
 
-set pimexportpath /temp/
-set msginpath /temp/msg-in/
-set pimimportpath /temp/pimimport/
+set pimexportpath /mnt/cifs-prod/import
+set msginpath /mnt/eclipse/msg-in
+set pimimportpath /mnt/cifs-prod/export/eclipse/
 set stringmatch *PIM_Upload_NewProduct_Created*
 set date [clock seconds]
 set lengthofday 86400
