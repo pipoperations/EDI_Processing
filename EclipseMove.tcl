@@ -72,10 +72,10 @@ proc eclipsetopim {pathfrom pathto} {
     file stat $filename attributes
     set Reference_Date $attributes(mtime)
     if {[expr [expr $mydate - $Reference_Date] < $mylengthofday] && [string match $mystringmatch $filename]} {
-        set namesuffix "[clock format $attributes(mtime) -format {%Y%m%d}].csv"
+        set namesuffix "[clock format $attributes(mtime) -format {%m%d}].csv"
         set filerename "PIP_IREF_IMPORT_$namesuffix"
         puts $filerename
-        set path "$pathto$filerename"
+        set path "$pathto/$filerename"
         MoveInboundFile $filename $path
         }
     }
@@ -85,5 +85,5 @@ proc eclipsetopim {pathfrom pathto} {
 #--------------------------------------------------------------------
 
 puts [clock format $date]
-pimtoeclipse $pimexportpath $msginpath
-# eclipsetopim $msginpath $pimimportpath
+# pimtoeclipse $pimexportpath $msginpath
+eclipsetopim $msginpath $pimimportpath

@@ -18,7 +18,7 @@
 #######################################################################
 
 ## Constants
-set AuthToken "Authorization: Token cb16790fafa2e6a12095e3f097aa54bfd3812095e9457cc473df85d1a426e41d"
+set AuthToken "Authorization: Token bc4a678384584fbd92ee0c0fc6deaa11506a61d6f6218d0f633ef011da2c0906"
 set path /home/kore_sftp/ftp-up/
 set processedpath /home/kore_sftp/processed/
 
@@ -41,13 +41,13 @@ foreach filename $filelist {
     puts $Reference_Date
     if {[string match "*OPENAR*" $filename]} { 
         set Report_Type open
-        set headers [list -vsSH "Authorization: Token cb16790fafa2e6a12095e3f097aa54bfd3812095e9457cc473df85d1a426e41d" -H "Content-Type: text/csv" -H "Reference-Date: $Reference_Date" -H "Report-Type: $Report_Type" -H "Ledger-Type: $Ledger_Type" -H "Ledger-Code: PIP_INC_AR" -X POST -T $filename https://pipsltest.cashanalytics.com/api/ledger_transaction_uploaders]
+        set headers [list -vsSH "Authorization: Token bc4a678384584fbd92ee0c0fc6deaa11506a61d6f6218d0f633ef011da2c0906" -H "Content-Type: text/csv" -H "Reference-Date: $Reference_Date" -H "Report-Type: $Report_Type" -H "Ledger-Type: $Ledger_Type" -H "Ledger-Code: PIP_INC_AR" -X POST -T $filename https://pip.cashanalytics.com/api/ledger_transaction_uploaders]
         catch {exec -keepnewline curl {*}$headers} options result
         puts "$options $result"
         file rename $filename $processedpath
     } elseif {[string match "*_INVPAY_*" $filename]} {
         set Report_Type cleared
-        set headers [list -vsSH "Authorization: Token cb16790fafa2e6a12095e3f097aa54bfd3812095e9457cc473df85d1a426e41d" -H "Content-Type: text/csv" -H "Reference-Date: $Reference_Date" -H "Report-Type: $Report_Type" -H "Ledger-Type: $Ledger_Type" -H "Ledger-Code: PIP_INC_AR" -X POST -T $filename https://pipsltest.cashanalytics.com/api/ledger_transaction_uploaders]
+        set headers [list -vsSH "Authorization: Token bc4a678384584fbd92ee0c0fc6deaa11506a61d6f6218d0f633ef011da2c0906" -H "Content-Type: text/csv" -H "Reference-Date: $Reference_Date" -H "Report-Type: $Report_Type" -H "Ledger-Type: $Ledger_Type" -H "Ledger-Code: PIP_INC_AR" -X POST -T $filename https://pip.cashanalytics.com/api/ledger_transaction_uploaders]
         catch {exec -keepnewline curl {*}$headers} options result
         puts "$options $result"
         file rename $filename $processedpath
