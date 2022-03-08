@@ -52,6 +52,7 @@ foreach filename $filelist {
 set filelist [ListFiles $processingpath]
 puts "$username $sftpsite"
 spawn sftp -i $rsakeyfile "$username@$sftpsite"
+expect "> " {send "progress \r"}
 foreach filename $filelist {
     if [string match $baifile $filename] {
         expect "> " {send "cd \r"}
