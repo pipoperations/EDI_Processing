@@ -20,11 +20,12 @@
 ## Constants
 #--------------------------------------------------------------------
 set pimexportpath /mnt/cifs-prod/export/eclipse/
-set msginpath /mnt/eclipse/msg-in
+set msginpath /mnt/eclipse/msg-out
 set pimimportpath /mnt/cifs-prod/import
 set stringmatch *PIM_Upload_NewProduct_Created*
 set date [clock seconds]
 set lengthofday 86400
+
 
 # procedure to list files in a directory
 #--------------------------------------------------------------------

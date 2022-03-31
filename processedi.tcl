@@ -9,7 +9,7 @@
 ##
 ## TODO: Implement SMB for CommerciaHub
 ## TODO: Maybe enhance with sqlite database file instead of txt customer files
-## TODO: #14 Implement archive by moth for Jay 👎
+## TODO: #14 Implement archive by month for Jay 👎
 ##
 ## HISTORY
 ##  V0.01 05.30.2020 - Initial script for United Rentals
@@ -333,6 +333,7 @@ proc ProcessFilesIn {pathout path} {
 # Main
 #==========================================================================
 
+puts "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 puts "Starting script"
 puts "The time is: [clock format $systemTime -format %H:%M:%S]"
 puts "The date is: [clock format $systemTime -format %D]"

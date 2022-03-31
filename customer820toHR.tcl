@@ -24,11 +24,15 @@ set username ProtectiveIndustrialProducts
 set sftpsite sftp.highradius.com
 set rsakeyfile /root/highradius_id_rsa
 set pushDirectory /inbound/prod/ediremittance
+set systemTime [clock seconds]
 
 # Proceedure to list files in a directory specfied by "filepath"
 #--------------------------------------------------------------------
 set Ledger_Type ar
 set date [clock format [clock seconds] -format {%y-%m-%d}]
+puts "Starting script"
+puts "The time is: [clock format $systemTime -format %H:%M:%S]"
+puts "The date is: [clock format $systemTime -format %D]"
 
 proc ListFiles {filepath} {
     # list file in the directory

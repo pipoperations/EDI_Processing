@@ -26,6 +26,7 @@ set stringmatch *PIM_Upload_NewProduct_Created*
 set date [clock seconds]
 set lengthofday 86400
 
+
 # procedure to list files in a directory
 #--------------------------------------------------------------------
 
