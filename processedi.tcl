@@ -100,7 +100,7 @@ proc ParseFile {filename ConfigPath} {
         set CustomerNumber [dict get $customer CustomerNumber]
         set occurs [string first $CustomerNumber $dataLine]
         if { $occurs > 0 } {
-            # return filename, and connection info (protocol, ip address, username, password)
+            puts $filename $CustomerNumber
             return $customer
         }
     }
