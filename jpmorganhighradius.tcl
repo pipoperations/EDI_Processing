@@ -28,6 +28,7 @@ set sftpsite sftp.highradius.com
 set rsakeyfile /root/highradius_id_rsa
 set pushDirectory /inbound/prod/caapaymentremittance
 set imagepushDirectory inbound/prod/caaimagefiles
+set timeout 30
 
 proc ListFiles {filepath} {
     # list file in the directory

@@ -1,0 +1,8 @@
+CustomerName	"Service Supply Test"
+CustomerNumber	3617882000		
+Protocol	local
+Host	localhost
+Username	Prptest
+Password	Pro@123p
+PushDirectory	/home/servicesupply_sftp/ftp-out
+PullDirectory	/home/servicesupply_sftp/ftp-in

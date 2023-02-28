@@ -39,9 +39,9 @@ set timeout 20
 set ConfigFile {opentest.txt}
 set Username ""
 set Password ""
-set GlobalPathin "/home/eclipseftp/ftp-in/"
-set GlobalPathout "/home/eclipseftp/ftp-out"
-set ConfigPath "/home/eclipseftp/scripts/config/"
+set GlobalPathin "/home/eclipseftp/test/ftp-in/"
+set GlobalPathout "/home/eclipseftp/test/ftp-out"
+set ConfigPath "/home/eclipseftp/scripts/config/test/"
 set ProcessedPath "/home/eclipseftp/processed/"
 set systemTime [clock seconds]
 
@@ -119,6 +119,7 @@ proc SendFile {file connectionstring } {
     set ipAddress [dict get $connectionstring Host]
     set protocol [dict get $connectionstring Protocol]
     set customerName [dict get $connectionstring CustomerName]
+    
 
     ## make sure that a value exists for the PushDirectory
 
@@ -276,6 +277,7 @@ proc ProcessFilesIn {pathout path} {
         if {[dict exist $customer PullDirectory]} {
             set protocol [dict get $customer Protocol]
             set customername [dict get $customer CustomerName]
+            puts $protocol
             switch $protocol {
                 local {
                     set directory [dict get $customer PullDirectory]
@@ -283,6 +285,9 @@ proc ProcessFilesIn {pathout path} {
                     foreach filename [ListFiles $directory] {
                         MoveInboundFile $filename $pathout
                         MoveOutboundFile $filename $customername
+                    }
+                    foreach file [ListFiles $pathout] {
+                        file attributes $file -group eclipseftp -permissions 00666
                     }
                 }
                 sftp {
@@ -302,9 +307,6 @@ proc ProcessFilesIn {pathout path} {
                         }
                         "Permission"{
                             close
-                            continue
-                        }
-                        timeout{
                             continue
                         }
                     }

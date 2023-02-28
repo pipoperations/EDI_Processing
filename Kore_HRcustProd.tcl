@@ -2,7 +2,7 @@
 ######################################################################
 ##
 ## NAME
-##  customer820toHR.tcl
+##  Kore_HRcust.tcl
 ##
 ## AUTHOR
 ##  Brian P. Wood
@@ -18,21 +18,18 @@
 
 ## Constants
 set AuthToken "Authorization: Token cb16790fafa2e6a12095e3f097aa54bfd3812095e9457cc473df85d1a426e41d"
-set path /home/inovis/820
-set processedpath /home/inovis/processed/
+set path /home/kore_sftp/inbound/prod/custextract
+set processedpath /home/kore_sftp/processed/
 set username ProtectiveIndustrialProducts
 set sftpsite sftp.highradius.com
 set rsakeyfile /root/highradius_id_rsa
-set pushDirectory /inbound/prod/ediremittance
-set systemTime [clock seconds]
+set pushDirectory /inbound/prod/custextract
 
 # Proceedure to list files in a directory specfied by "filepath"
 #--------------------------------------------------------------------
 set Ledger_Type ar
 set date [clock format [clock seconds] -format {%y-%m-%d}]
-puts "Starting script"
-puts "The time is: [clock format $systemTime -format %H:%M:%S]"
-puts "The date is: [clock format $systemTime -format %D]"
+set time [clock format [clock seconds] -format %H:%M:%S]
 
 proc ListFiles {filepath} {
     # list file in the directory
@@ -43,16 +40,24 @@ proc ListFiles {filepath} {
 
 set filelist [ListFiles $path]
 puts "$username $sftpsite"
+puts "$time"
+puts "$date"
+puts "==============================================================="
 spawn sftp -i $rsakeyfile "$username@$sftpsite"
 foreach filename $filelist {
-        expect "> " {send "cd \r"}
-        expect "> " {send "cd $pushDirectory\r"}
-        expect "> " {send "put $filename\r" }
+        expect "> " {send "cd \r"
+        puts "$time"
+        }
+        expect "> " {send "cd $pushDirectory\r"
+        puts "$time"
+        }
+        expect "> " {send "put $filename\r"
+        puts "$time"
+        }
 }
 expect "> " { send "quit\r" }
 puts Done
 
 foreach filename $filelist {
-    puts $filename
-    file rename -force $filename $processedpath
+    file rename $filename $processedpath
 }

@@ -1,0 +1,8 @@
+CustomerName	Clark_Associates
+CustomerNumber	054146402
+Protocol	sftp
+Host	clarkedi.clarkinc.biz	
+Username	PRO440
+Password	YG?B,)vw_Vg"OrOV
+PushDirectory	Inbound
+PullDirectory	Outbound

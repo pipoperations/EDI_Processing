@@ -33,6 +33,7 @@ set lengthofday 86400
 proc ListFiles {filepath} {
     # list file in the directory
     set filelist [glob -types f -nocomplain -directory $filepath *]
+    # puts $filelist
     return $filelist
 }
 
@@ -52,10 +53,11 @@ proc pimtoeclipse {pathfrom pathto} {
     upvar #0 lengthofday lengthofday
     set filelist [ListFiles $pathfrom]
     foreach filename $filelist {
+    # puts $filename
     file stat $filename attributes
     set  Reference_Date $attributes(mtime)
     if {[expr $mydate - $Reference_Date] < $lengthofday } {
-        puts $filename
+        # puts $filename
         MoveInboundFile $filename $pathto
         }
     }
@@ -69,16 +71,22 @@ proc eclipsetopim {pathfrom pathto} {
     upvar #0 stringmatch mystringmatch
     upvar #0 lengthofday mylengthofday
     set filelist [ListFiles $pathfrom]
+    # puts "Processing files"
     foreach filename $filelist {
-    file stat $filename attributes
-    set Reference_Date $attributes(mtime)
-    if {[expr [expr $mydate - $Reference_Date] < $mylengthofday] && [string match $mystringmatch $filename]} {
-        set namesuffix "[clock format $attributes(mtime) -format {%m%d}].csv"
-        set filerename "PIP_IREF_IMPORT_$namesuffix"
-        puts $filerename
-        set path "$pathto/$filerename"
-        MoveInboundFile $filename $path
-        }
+        # puts "Processing $filename"
+        if {[file exists $filename] == 1} {
+            file stat $filename attributes
+            # puts "$filename $attributes(mtime)"
+            set Reference_Date $attributes(mtime)
+            if {[expr [expr $mydate - $Reference_Date] < $mylengthofday] && [string match $mystringmatch $filename]} {
+                set namesuffix "[clock format $attributes(mtime) -format {%m%d}].csv"
+                set filerename "PIP_IREF_IMPORT_$namesuffix"
+                puts $filerename
+                set path "$pathto/$filerename"
+                puts "Moving file $filename"
+                MoveInboundFile $filename $path
+            }   
+        }   
     }
 }
 

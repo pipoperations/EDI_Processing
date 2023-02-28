@@ -1,0 +1,10 @@
+CustomerName	"True Commerce"
+CustomerNumber	9042962240	
+Protocol	local
+Host	localhost
+Username	Prptest
+Password	Pro@123p
+PushDirectory	/home/truecommerce_sftp/test-ftp-in
+PullDirectory	/home/truecommerce_sftp/test-ftp-out
+
+

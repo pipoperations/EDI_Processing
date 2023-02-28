@@ -2,7 +2,7 @@
 ######################################################################
 ##
 ## NAME
-##  customer820toHR.tcl
+##  Kore_HRar.tcl
 ##
 ## AUTHOR
 ##  Brian P. Wood
@@ -18,21 +18,17 @@
 
 ## Constants
 set AuthToken "Authorization: Token cb16790fafa2e6a12095e3f097aa54bfd3812095e9457cc473df85d1a426e41d"
-set path /home/inovis/820
-set processedpath /home/inovis/processed/
+set path /home/kore_sftp/inbound/prod/arextract
+set processedpath /home/kore_sftp/processed/
 set username ProtectiveIndustrialProducts
 set sftpsite sftp.highradius.com
 set rsakeyfile /root/highradius_id_rsa
-set pushDirectory /inbound/prod/ediremittance
-set systemTime [clock seconds]
+set pushDirectory /inbound/prod/arextract
 
 # Proceedure to list files in a directory specfied by "filepath"
 #--------------------------------------------------------------------
 set Ledger_Type ar
 set date [clock format [clock seconds] -format {%y-%m-%d}]
-puts "Starting script"
-puts "The time is: [clock format $systemTime -format %H:%M:%S]"
-puts "The date is: [clock format $systemTime -format %D]"
 
 proc ListFiles {filepath} {
     # list file in the directory
@@ -53,6 +49,5 @@ expect "> " { send "quit\r" }
 puts Done
 
 foreach filename $filelist {
-    puts $filename
-    file rename -force $filename $processedpath
+    file rename $filename $processedpath
 }

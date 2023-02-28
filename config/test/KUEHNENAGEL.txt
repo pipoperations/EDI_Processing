@@ -1,0 +1,8 @@
+CustomerName	KUEHNENAGEL
+CustomerNumber	KNTEST
+Protocol	local
+Host	localhost	
+Username	dummy
+Password	YG?B,)vw_Vg"OrOV
+PushDirectory	/home/kuehnenagel_sftp/test/ftp-in
+PullDirectory	/home/kuehnenagel_sftp/test/ftp-out
