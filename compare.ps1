@@ -23,6 +23,10 @@ $localDirectory = "/home/kore_sftp/outbound/prod"
 $nopasswd = new-object System.Security.SecureString
 $creds = New-Object System.Management.Automation.PSCredential ($sftpuser, $nopasswd)
 
+$today = Get-Date -UFormat "%A %m/%d/%Y %R %Z"
+Write-host $today
+Write-Host "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
 # Log in to the SFTP server using the RSA key
 
 $sftpSession = New-SFTPSession -ComputerName $server -Credential $creds -KeyFile $keyFile
