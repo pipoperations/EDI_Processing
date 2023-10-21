@@ -1,5 +1,5 @@
 CustomerName	Conexium
-CustomerNumber	5188610133T
+CustomerNumber	257379107
 Protocol	local
 Host		localhost
 Username	ProtectiveIndustrialProducts

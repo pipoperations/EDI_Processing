@@ -10,7 +10,7 @@ $targetDirectory = "/outbound/prod/caa/ftp"
 $processedDirectory = "/outbound/prod/caa/ftp/Processed"
 $sftpuser = "ProtectiveIndustrialProducts"
 $From = "relay@pipusa.com"
-$To =  @('bwood@pipusa.com', 'thess@pipusa.com', 'aqureshi@pipusa.com')
+$To =  @('bwood@pipusa.com', 'thess@pipusa.com', 'aqureshi@pipusa.com','carndt@pipusa.com')
 $User = "relay@pipusa.com"
 $Pword = ConvertTo-SecureString -String "vRV!Em229+Y^xYY?" -AsPlainText -Force
 
@@ -20,11 +20,11 @@ $localDirectory = "/home/kore_sftp/outbound/prod"
 
 #Setting credentials for the user account
 
-$nopasswd = new-object System.Security.SecureString
+$nopasswd = New-object System.Security.SecureString
 $creds = New-Object System.Management.Automation.PSCredential ($sftpuser, $nopasswd)
 
 $today = Get-Date -UFormat "%A %m/%d/%Y %R %Z"
-Write-host $today
+Write-Host $today
 Write-Host "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 # Log in to the SFTP server using the RSA key
@@ -52,7 +52,7 @@ if ($duplicates) {
    $Body = "Transfer failed! Duplicate files found! EXITING! `n`n" + ($remoteFiles.name -join "`n")
    $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $Pword
    $response = Send-MailMessage -SmtpServer "smtp.office365.com" -Port 587 -UseSsl -Credential $Credential -To $To -From $From -Subject "HighRadius Transfer Failed!" -Body $Body
-   write-host $Body
+   Write-Warning $Body
    exit
 } else {
    Foreach ($file in $remoteFiles) {
@@ -63,7 +63,7 @@ if ($duplicates) {
    $Body = "Transfer! `n`n" + ($remoteFiles.name -join "`n")
    $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $Pword
    $response = Send-MailMessage -SmtpServer "smtp.office365.com" -Port 587 -UseSsl -Credential $Credential -To $To -From $From -Subject "HighRadius Transfer Success!" -Body $Body
-   write-host $Body
+   Write-Host $Body
 }
 
 # Close the SFTP session

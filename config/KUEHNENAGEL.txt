@@ -4,5 +4,5 @@ Protocol	local
 Host	localhost	
 Username	dummy
 Password	YG?B,)vw_Vg"OrOV
-PushDirectory	/home/kuehnenagel_sftp/test/ftp-in
-PullDirectory	/home/kuehnenagel_sftp/test/ftp-out
+PushDirectory	/home/kuehnenagel_sftp/prod/ftp-in
+PullDirectory	/home/kuehnenagel_sftp/prod/ftp-out

@@ -49,6 +49,15 @@ set systemTime [clock seconds]
 # Procedures
 #=======================================================================
 
+proc is_empty {string} {
+    expr {![binary scan $string c c]}
+}
+
+proc not_empty {string} {
+    expr {![is_empty $string]}
+}
+
+
 # Proceedure to list files in a directory specfied by "filepath"
 #--------------------------------------------------------------------
 
@@ -136,12 +145,21 @@ proc SendFile {file connectionstring } {
     } else {
         set pullDirectory ""
     }
+    if {[dict exists $connectionstring RsaKey]} {
+        set RsaKey [dict get $connectionstring RsaKey]
+    } else {
+        set RsaKey ""
+        puts "No RSAKey"
+    }
     puts "$customerName"
     puts "$protocol"
     switch $protocol {
         sftp {
-            puts "$username $password $ipAddress"
-            spawn sftp "$username@$ipAddress"
+            if {[not_empty $RsaKey]} {
+                    spawn sftp -i /root/.ssh/$RsaKey -P 1224 "$username@$ipAddress"
+                } else {
+                    spawn sftp "$username@$ipAddress"
+            }
             expect {
                 "assword:" {
                     send "$password\r"
@@ -296,8 +314,19 @@ proc ProcessFilesIn {pathout path} {
                     set ipAddress [dict get $customer Host]
                     set pullDirectory [dict get $customer PullDirectory]
                     puts $customername
+                    if {[dict exists $customer RsaKey]} {
+                        set RsaKey [dict get $customer RsaKey]
+                    } else {
+                        set RsaKey ""
+                        puts "No RSAKey"
+                    }
                     ## puts "$username $password $ipAddress"
-                    spawn sftp "$username@$ipAddress"
+                    if {[not_empty $RsaKey]} {
+                        spawn sftp -i /root/.ssh/$RsaKey -P 1224 "$username@$ipAddress"
+                    } else {
+                        spawn sftp "$username@$ipAddress"
+                    }
+
                     expect {
                         "assword:" {
                            send "$password\r"
@@ -307,6 +336,9 @@ proc ProcessFilesIn {pathout path} {
                         }
                         "Permission"{
                             close
+                            continue
+                        }
+                        timeout {
                             continue
                         }
                     }

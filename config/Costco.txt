@@ -5,4 +5,4 @@ Host	westchester.sftp.commercehub.com
 Username	westchester
 Password	Away8Chair0Believe7$
 PushDirectory	incoming/intchg
-PullDirectory   outgoing/intchg
+PullDirectory	outgoing/intchg
