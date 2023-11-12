@@ -1,9 +1,10 @@
 CustomerName	ULINE
 CustomerNumber	039612668
 Protocol	sftp
+Port	1224
 Host	mft-uat.uline.com	
 Username	SFTPPIP
-Password	""
 PushDirectory	/PIP/incoming
-PullDirectory	/PIP/outgoing
+PullDirectory	/PIP/incoming
 RsaKey	 UNLINE_rsa
+

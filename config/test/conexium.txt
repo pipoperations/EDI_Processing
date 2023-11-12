@@ -1,9 +1,5 @@
 CustomerName	Conexium
 CustomerNumber	257379107
 Protocol	local
-Host		localhost
-Username	ProtectiveIndustrialProducts
-Password	@XxGaN6zyD36
 PushDirectory	/home/conexiom_sftp/ftp-out
 PullDirectory	/home/conexiom_sftp/ftp-in
-

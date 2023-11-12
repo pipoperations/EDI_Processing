@@ -1,0 +1,8 @@
+CustomerName	Houser Shoes
+CustomerNumber	062560917
+Protocol	sftp
+Host		192.237.154.245
+Username	puma
+Password	b9GdcBhFwnKADypU
+PushDirectory	/in
+PullDirectory	/out

@@ -299,7 +299,6 @@ proc ProcessFilesIn {pathout path} {
             switch $protocol {
                 local {
                     set directory [dict get $customer PullDirectory]
-                    puts $customername
                     foreach filename [ListFiles $directory] {
                         MoveInboundFile $filename $pathout
                         MoveOutboundFile $filename $customername
@@ -310,7 +309,9 @@ proc ProcessFilesIn {pathout path} {
                 }
                 sftp {
                     set username [dict get $customer Username]
-                    set password [dict get $customer Password]
+                    if {[dict exists $customer Password]} {
+                        set password [dict get $customer Password]
+                    }
                     set ipAddress [dict get $customer Host]
                     set pullDirectory [dict get $customer PullDirectory]
                     puts $customername

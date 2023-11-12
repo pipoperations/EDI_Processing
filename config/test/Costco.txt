@@ -1,5 +1,5 @@
 CustomerName	Costco
-CustomerNumber	4253138601CHQT
+CustomerNumber	4253138601CH
 Protocol	sftp
 Host	westchester.sftp-test.commercehub.com
 Username	westchester

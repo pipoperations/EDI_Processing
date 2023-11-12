@@ -4,6 +4,6 @@ Protocol	local
 Host	mft-uat.uline.com	
 Username	
 Password	
-PushDirectory	 /home/ossine_sftp/test/ftp-in
-PullDirectory	 /home/ossine_sftp/test/ftp-out
+PushDirectory	 /home/ossine_sftp/test/ftp-out
+PullDirectory	 /home/ossine_sftp/test/ftp-in
 RsaKey	 
