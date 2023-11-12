@@ -10,7 +10,7 @@ $targetDirectory = "/outbound/prod/caa/ftp"
 $processedDirectory = "/outbound/prod/caa/ftp/Processed"
 $sftpuser = "ProtectiveIndustrialProducts"
 $From = "relay@pipusa.com"
-$To =  @('bwood@pipusa.com', 'thess@pipusa.com', 'aqureshi@pipusa.com','carndt@pipusa.com')
+$To =  @('bwood@pipusa.com', 'thess@pipusa.com', 'aqureshi@pipusa.com')
 $User = "relay@pipusa.com"
 $Pword = ConvertTo-SecureString -String "vRV!Em229+Y^xYY?" -AsPlainText -Force
 

@@ -326,7 +326,6 @@ proc ProcessFilesIn {pathout path} {
                     } else {
                         spawn sftp "$username@$ipAddress"
                     }
-
                     expect {
                         "assword:" {
                            send "$password\r"

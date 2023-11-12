@@ -40,13 +40,13 @@ set filelist [ListFiles $path]
 foreach filename $filelist {
     puts $filename
     set justfilename [file tail $filename]
-    eval exec -ignorestderr --  gpg --output $processingpath${justfilename} -v --decrypt --batch $filename 
+    eval exec -ignorestderr --  gpg --output $processingpath${justfilename} -v --decrypt --batch $filename
     file delete $filename
 }
 
 set filelist [ListFiles $processingpath]
 foreach filename $filelist {
-        eval exec -ignorestderr -- gpg -e -r priya.pr@highradius.com $filename
+        eval exec -ignorestderr -- gpg -e -r saisriker.peddi@highradius.com $filename
         file rename $filename $processedpath
 }
 

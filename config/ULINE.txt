@@ -1,0 +1,10 @@
+CustomerName	ULINE
+CustomerNumber	039612668
+Protocol	sftp
+Host	mft.uline.com	
+Username	SFTPPIP
+Password	""
+PushDirectory	/PIP/incoming
+PullDirectory	/PIP/outgoing
+RsaKey	 UNLINE_rsa
+

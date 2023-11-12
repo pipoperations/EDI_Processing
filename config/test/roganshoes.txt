@@ -1,0 +1,9 @@
+CustomerName	Rogans Shoes
+CustomerNumber	2626373613
+Protocol	local
+Host	localhost
+Username	dummy
+Password	sillyskunk98
+PullDirectory	/home/rogan_sftp/test/ftp-in
+PushDirectory	/home/rogan_sftp/test/ftp-out
+RsaKey

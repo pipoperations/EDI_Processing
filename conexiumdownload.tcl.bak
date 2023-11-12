@@ -22,9 +22,9 @@
 #======================================================================
 
 set username ProtectiveIndustrialProducts
-set sftpsite 20.116.14.130
-set password dgLj3btVFA
-set PullDirectory /ProtectiveIndustrialProducts/Reports
+set sftpsite 216.187.109.27
+set password @XxGaN6zyD36
+set PullDirectory /Reports
 set processingpath /EDI_Processed_mnt/Conexium
 set path /home/kore_sftp/inbound/test/arextract
 #set processedpath 
@@ -61,7 +61,7 @@ proc getfiles {password username sftpSite path processingPath} {
                             close
                             continue
                         }
-                        "20.116.14.130."{
+                        "216.187.109.27."{
                             continue
                         }
                         timeout{
