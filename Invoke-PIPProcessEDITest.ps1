@@ -9,6 +9,12 @@
 .COMPANY
     Protective Industrial Products, Inc.
 
+.COPYRIGHT
+    2023 (c) Protective Industrial Products, Inc. All rights reserved.
+
+.LICENSE
+    MIT License
+
 .TODO
     Implement SMB for CommerceHub
     Maybe enhance with sqlite database file instead of txt customer files
@@ -16,6 +22,7 @@
 .RELEASENOTES
     V0.01: 10.21.2023 - Initial script in PowerShell
     V0.02: 11.11.2023 - Revised coding style
+    V0.03: 11.12.2023 - Added Houser Shoes file rename
 
 .SYNOPSIS
     This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
@@ -313,6 +320,7 @@ function Invoke-PIPCustomerFileProcessing {
                 $Customer = Find-PIPEDICustomer -FileName $file.FullName -Customers $Customers
                 if ($null -ne $Customer) {
                     $customername = $Customer.CustomerName
+                    $file = Rename-FileIfNecessary -file $file -Customer $customername
                     $success = Copy-PIPCustomerFile -FileName $file.FullName -Customer $Customer -Direction $Direction
                     if ($null -ne $success) {
                         # Move file to processed directory (customer+date) if successful
@@ -359,6 +367,25 @@ function Invoke-PIPCustomerFileProcessing {
             }
         }
     }
+}
+
+function Rename-FileIfNecessary {
+    <#
+    .SYNOPSIS
+        Proceedure to rename a file if necessary for houser
+    #>
+    param (
+        [Parameter(Mandatory=$true)]
+        [System.IO.FileInfo] $File,
+        [Parameter(Mandatory=$true)]
+        [string] $customer
+    )
+
+    if ($File.Name.StartsWith("PSFTP856") -and $customer -eq "Houser Shoes") {
+        $newFile = $File.FullName -replace 'PSFTP856', 'PSFTP_856'
+        $File = Rename-Item -Path $File -NewName $newFile -PassThru
+    }
+    Return $File
 }
 
 <#

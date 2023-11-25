@@ -15,6 +15,9 @@
 .LICENSE
     MIT License
 
+.RELEASE
+    1.0.0
+
 .SYNOPSIS
     This script will install a certificate into the Linux certificate store.
 
