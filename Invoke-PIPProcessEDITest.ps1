@@ -1,30 +1,35 @@
 #!/usr/bin/pwsh
-<#
-    .NAME
-        processedi.tcl
-    .AUTHOR
-        Brian P. Wood
-    .COMPANY
-        Protective Industrial Products, Inc.
-    .TODO
-        Implement SMB for CommerceHub
-        Maybe enhance with sqlite database file instead of txt customer files
-    .RELEASENOTES
-        V0.01: 10.21.2023 - Initial script in PowerShell
-        V0.02: 11.11.2023 - Revised coding style
-    .SYNOPSIS
-        This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
-        Customer files should be in this format
-        CustomerName     ABC Corp
-        CustomerNumber   1234
-        Protocol         sftp
-        Host       10.10.10.10
-        Username         Brianisawesome
-        Password         W3lc0m3!
-        PushDirectory    ftp-in
-        PullDirectory    ftp-out
-        RSAKey           ~/.ssh/privatekey.rsa   
-        Use tabs between keys and values
+<#PSScriptinfo
+.NAME
+    Invoke-PIPProcessEDITest.ps1
+
+.AUTHOR
+    Brian P. Wood
+
+.COMPANY
+    Protective Industrial Products, Inc.
+
+.TODO
+    Implement SMB for CommerceHub
+    Maybe enhance with sqlite database file instead of txt customer files
+
+.RELEASENOTES
+    V0.01: 10.21.2023 - Initial script in PowerShell
+    V0.02: 11.11.2023 - Revised coding style
+
+.SYNOPSIS
+    This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
+    Customer files should be in this format
+    CustomerName     ABC Corp
+    CustomerNumber   1234
+    Protocol         sftp
+    Host       10.10.10.10
+    Username         Brianisawesome
+    Password         W3lc0m3!
+    PushDirectory    ftp-in
+    PullDirectory    ftp-out
+    RSAKey           ~/.ssh/privatekey.rsa   
+    Use tabs between keys and values
 #>
 
 # Set Global Variables
@@ -32,8 +37,8 @@
 $ConfigFile = "opentest.txt"
 $Username = ""
 $Password = ""
-$GlobalPathin = "/home/eclipseftp/ftp-in/" # In is Outbound to customer
-$GlobalPathout = "/home/eclipseftp/ftp-out/" #Out is Inbound from customer
+$GlobalPathin = "/home/eclipseftp/test/ftp-in/" # In is Outbound to customer
+$GlobalPathout = "/home/eclipseftp/test/ftp-out/" #Out is Inbound from customer
 $ConfigPath = "/home/eclipseftp/scripts/config/test/"
 $ProcessedPath = "/home/eclipseftp/processed/"
 
@@ -41,6 +46,7 @@ function Install-ModuleIfNotExists {
     <#
         .SYNOPSIS
             Proceedure to verify required modules are installed and install them if they don't exist
+
         .EXAMPLE
             $ModuleName = "Posh-SSH"
             Install-ModuleIfNotExists -moduleName $moduleName
@@ -73,6 +79,7 @@ function Get-PIPEDICustomers {
     <#
     .SYNOPSIS
         Proceedure to parse Customer files into an list of object.
+   
     .EXAMPLE
         $objects = Get-PIPEDICustomers -FilePath $ConfigPath 
     #>
@@ -128,7 +135,9 @@ function Copy-PIPCustomerFile {
     <#
     .SYNOPSIS
         Proceedure to Copy customer files based on direction
-    .EXAMPLE Copy-PIPCustomerFile -FileName SomeFile -Customer CustomerObject -Direction In/Out
+
+    .EXAMPLE
+        Copy-PIPCustomerFile -FileName SomeFile -Customer CustomerObject -Direction In/Out
     #>
     param (
         [String]$FileName,
@@ -140,13 +149,11 @@ function Copy-PIPCustomerFile {
 
     switch ($Direction) {
         OUT {
-            # Write-Host ("function " + $MyInvocation.MyCommand.Name + " Direction $Direction")
             switch ($Customer.Protocol) {
                 local {
-                    # debug Write-Host ("function " + $MyInvocation.MyCommand.Name + " Direction $Direction " + $Customer.Protocol)
                     try {
-                        # Write-host "protocal Local"
                         $result = Copy-Item -Path $FileName -Destination $Customer.PushDirectory -PassThru
+                        /bin/chmod -v  00666 $(join-path -Path $Customer.PushDirectory -ChildPath (split-path $FileName -Leaf)) | Out-Null
                         return $result
                         
                     }
@@ -276,10 +283,10 @@ function Connect-PIPSFTPServer {
     $credentials = New-Object System.Management.Automation.PSCredential ($username, $securepassword)
     switch ($connectionauth) {
         key {
-            $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -KeyFile $keyfile -AcceptKey -ConnectionTimeout 30
+            $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -KeyFile $keyfile -AcceptKey -ConnectionTimeout 30 -verbose
         }
         password {
-            $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -AcceptKey -ConnectionTimeout 30
+            $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -AcceptKey -ConnectionTimeout 30 -verbose
         }
     }
     
@@ -353,8 +360,6 @@ function Invoke-PIPCustomerFileProcessing {
         }
     }
 }
-
-
 
 <#
     .SYNOPSIS

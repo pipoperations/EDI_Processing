@@ -1,0 +1,8 @@
+CustomerName	WCPGFTP
+CustomerNumber	
+Protocol	sftp
+Host	sftp.rockbrands.com	
+Username	SFTPPIP
+Password	&d2kc@Mox2
+PushDirectory	/Incoming
+PullDirectory	/Outgoing
