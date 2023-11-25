@@ -1,4 +1,5 @@
-﻿<#
+﻿#!/usr/bin/pwsh
+<#PSScriptinfo
 .NAME
     Invoke-PIPStoreCertificateLinux.ps1
 

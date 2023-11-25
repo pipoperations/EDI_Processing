@@ -1,3 +1,4 @@
+#!/usr/bin/pwsh
 <#PSScriptInfo
 .NAME
     Get-PIPRiskDetections.ps1
