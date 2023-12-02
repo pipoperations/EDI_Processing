@@ -1,8 +1,0 @@
-CustomerName	SFTP_TEST
-CustomerNumber	1234
-Protocol	sftp
-Host	azure-app01.pipusa.com
-Username	bwood
-PushDirectory	ftp-in
-PullDirectory	ftp-out
-RsaKey	id_rsa

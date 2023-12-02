@@ -26,6 +26,7 @@
 
 .SYNOPSIS
     This program takes a list of files in a msg-out directory parses them for a unique customer number and matches to a list of customer attributes.
+    Then retrieves any inbound files from the list of customers and places them in the ftp-out directory.
     Customer files should be in this format
     CustomerName     ABC Corp
     CustomerNumber   1234
@@ -198,7 +199,9 @@ function Copy-PIPCustomerFile {
                 }
                 sftp {
                     $sftpsession = Connect-PIPSFTPServer -Customer $Customer
-                    $remoteFiles = Get-SFTPChildItem -SessionId $sftpsession.SessionId -Path $Customer.PullDirectory -File 
+                    if ($null -ne $sftpsession) {
+                        $remoteFiles = Get-SFTPChildItem -SessionId $sftpsession.SessionId -Path $Customer.PullDirectory -File 
+                    }
                     # Download each file to the local directory
                     if ($null -eq $remoteFiles) {
                         write-host "$($Customer.CustomerName) no files found"
@@ -288,15 +291,20 @@ function Connect-PIPSFTPServer {
     }
 
     $credentials = New-Object System.Management.Automation.PSCredential ($username, $securepassword)
-    switch ($connectionauth) {
-        key {
-            $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -KeyFile $keyfile -AcceptKey -ConnectionTimeout 30 -verbose
-        }
-        password {
-            $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -AcceptKey -ConnectionTimeout 30 -verbose
+    try {
+        switch ($connectionauth) {
+            key {
+                    $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -KeyFile $keyfile -AcceptKey -ConnectionTimeout 30
+            }
+            password {
+                    $sftpSession = New-SFTPSession -ComputerName $sftphost -Port $port -Credential $credentials -AcceptKey -ConnectionTimeout 30
+            }
         }
     }
-    
+    catch {
+        write-host "Unable to connect to $sftphost"
+        return $null
+    }
     return $sftpSession
 }
 
@@ -376,14 +384,15 @@ function Rename-FileIfNecessary {
     #>
     param (
         [Parameter(Mandatory=$true)]
-        [System.IO.FileInfo] $File,
+        [string] $filename,
         [Parameter(Mandatory=$true)]
         [string] $customer
     )
 
-    if ($File.Name.StartsWith("PSFTP856") -and $customer -eq "Houser Shoes") {
-        $newFile = $File.FullName -replace 'PSFTP856', 'PSFTP_856'
-        $File = Rename-Item -Path $File -NewName $newFile -PassThru
+    if (($filename.Contains("PSFT856") -or $filename.Contains("PSFT810")) -and $customer -eq "Houser Shoes") {
+        $newFilename = $filename -replace "PSFT856", "PSFT_856" -replace "PSFT810", "PSFT_810"
+        Rename-Item -Path $filename -NewName $newFilename
+        $File = $newFilename
     }
     Return $File
 }

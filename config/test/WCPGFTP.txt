@@ -1,8 +1,8 @@
 CustomerName	WCPGFTP
 CustomerNumber	
 Protocol	sftp
-Host	sftp.rockbrands.com	
-Username	SFTPPIP
+Host	ftp.rockybrands.com	
+Username	WCPGFTP
 Password	&d2kc@Mox2
 PushDirectory	/Incoming
 PullDirectory	/Outgoing
