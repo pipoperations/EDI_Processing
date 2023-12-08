@@ -4,6 +4,6 @@ Protocol	local
 Host	localhost
 Username	dummy
 Password	sillyskunk98
-PullDirectory	/home/rogan_sftp/test/ftp-out
-PushDirectory	/home/rogan_sftp/test/ftp-in
+PullDirectory	/home/rogan_sftp/ftp-out
+PushDirectory	/home/rogan_sftp/ftp-in
 RsaKey

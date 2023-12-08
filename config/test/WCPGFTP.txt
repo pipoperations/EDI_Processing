@@ -1,4 +1,4 @@
-CustomerName	WCPGFTP
+CustomerName	Lehigh
 CustomerNumber	
 Protocol	sftp
 Host	ftp.rockybrands.com	
