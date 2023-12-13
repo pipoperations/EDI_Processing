@@ -31,7 +31,7 @@ foreach ($file in $files) {
     Write-Host "Uploading $($file.Name) to $remotePath"
     try {
         Set-SFTPItem -SessionId $session.SessionId -Path $file -Destination $SftpDirectory -Force -Debug
-    }
+    }   
     catch {
         Write-Host "Error uploading $($file.Name): $_"
     }

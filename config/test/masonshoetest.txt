@@ -1,0 +1,9 @@
+CustomerName	Mason Shoe
+CustomerNumber	EBAYEMASON
+Protocol	local
+Host		
+Username	
+Password	
+PushDirectory	 /home/masonshoe_sftp/test/ftp-in
+PullDirectory	 /home/masonshoe_sftp/test/ftp-out
+RsaKey	 
