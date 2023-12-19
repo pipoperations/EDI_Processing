@@ -391,9 +391,12 @@ function Rename-FileIfNecessary {
     )
 
     if ($customer -eq "Houser Shoes") {
-        $newFilename = $newFilename = $filename.Insert(7, "_")
-        Rename-Item -Path $filename -NewName $newFilename
-        $File = $newFilename
+        $name = split-path -Path $filename -Leaf
+        $newFilename = $name.Insert(4, "_")
+        $path = split-path -Path $filename -Parent
+        $fullpath = Join-Path -Path $path -ChildPath $newFilename
+        Rename-Item -Path $filename -NewName $fullpath
+        $File = [System.IO.FileInfo] $fullpath
     }
     Return $File
 }
