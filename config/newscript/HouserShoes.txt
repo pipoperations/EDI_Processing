@@ -1,7 +1,7 @@
 CustomerName	Houser Shoes
 CustomerNumber	062560917
 Protocol	sftp
-Host	sftp.housershoes.comsftp.housershoes.com
+Host	sftp.housershoes.com
 Username	puma
 Password	b9GdcBhFwnKADypU
 PushDirectory	/in

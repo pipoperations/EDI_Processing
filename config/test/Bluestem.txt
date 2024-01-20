@@ -1,0 +1,9 @@
+CustomerName	Bluestem
+CustomerNumber	12:9526563852CHQT
+Protocol	sftp
+Host	protectind.sftp-test.commercehub.com
+Username	protectind
+Password	Fast9Finding9Cook4$
+PushDirectory	 incoming/intchg
+PullDirectory	 outgoing/intchg
+RsaKey	
